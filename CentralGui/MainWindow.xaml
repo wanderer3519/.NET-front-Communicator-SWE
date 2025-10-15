@@ -5,12 +5,155 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CentralGui"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top">
+
+    <Window.Resources>
+        <!-- Glassy pressed background -->
+        <LinearGradientBrush x:Key="GlassyPressedBrush"
+                StartPoint="0,0"
+                EndPoint="0,1">
+            <GradientStop Color="#80FFFFFF"
+                    Offset="0.0"/>
+            <GradientStop Color="#55D6EEFF"
+                    Offset="0.45"/>
+            <GradientStop Color="#33FFFFFF"
+                    Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <Style x:Key="ToolbarButton"
+                TargetType="Button">
+            <Setter Property="Width"
+                    Value="40"/>
+            <Setter Property="Height"
+                    Value="26"/>
+            <Setter Property="Margin"
+                    Value="4"/>
+            <Setter Property="Padding"
+                    Value="2"/>
+            <Setter Property="FontSize"
+                    Value="13"/>
+            <Setter Property="Background"
+                    Value="Transparent"/>
+            <Setter Property="BorderBrush"
+                    Value="#FFCCCCCC"/>
+            <Setter Property="BorderThickness"
+                    Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                        Value="True">
+                    <Setter Property="Background"
+                            Value="#FFF5F7FB"/>
+                </Trigger>
+                <Trigger Property="IsPressed"
+                        Value="True">
+                    <!-- glassy gradient background + slightly darker border -->
+                    <Setter Property="Background"
+                            Value="{StaticResource GlassyPressedBrush}"/>
+                    <Setter Property="BorderBrush"
+                            Value="#FF6FA6D6"/>
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="0.995"
+                                    ScaleY="0.995"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="RenderTransformOrigin"
+                            Value="0.5,0.5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <!-- Left toolbar -->
+        <Border Grid.Column="0"
+                Background="#FFF0F0F0"
+                BorderBrush="#FFDDDDDD"
+                BorderThickness="0,0,1,0">
+            <Grid Margin="6">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Tools"
+                        FontWeight="Bold"
+                        Margin="4"
+                        HorizontalAlignment="Center"/>
+
+                <!-- Tool buttons (top) -->
+                <StackPanel Grid.Row="1"
+                        Margin="0"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Center">
+                    <Button x:Name="BtnFreehand"
+                            Content="🖋️"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="BtnFreehand_Click"/>
+                    <Button x:Name="BtnLine"
+                            Content="/"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="BtnLine_Click"/>
+                    <Button x:Name="BtnRectangle"
+                            Content="▭"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="BtnRectangle_Click"/>
+                    <Button x:Name="BtnEllipse"
+                            Content="○"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="BtnEllipse_Click"/>
+                    <Button x:Name="BtnTriangle"
+                            Content="△"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="BtnTriangle_Click"/>
+                </StackPanel>
+
+                <!-- Undo/Redo at bottom -->
+                <StackPanel Grid.Row="2"
+                        Orientation="Vertical"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center">
+                    <Button x:Name="BtnUndo"
+                            Content="&lt;"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="BtnUndo_Click"/>
+                    <Button x:Name="BtnRedo"
+                            Content="&gt;"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="BtnRedo_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Canvas area where we track the mouse -->
+        <Canvas x:Name="DrawArea"
+                Grid.Column="1"
+                Width="1600"
+                Height="900"
+                Background="LightGray"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"/>
     </Grid>
 </Window>
